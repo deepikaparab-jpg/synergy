@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F3EADB">
+<title>Synergy</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<nav class="rail" id="rail" aria-label="Sections"></nav>
+<main data-tp="timer">
+ <header>
+  <h1><img class="logo" src="icons/logo.png" alt="" width="36" height="36"> Synergy</h1>
+  <div class="hdr">
+   <button class="icon" id="dictBtn" aria-label="Dictionary"></button>
+   <button class="icon" id="menuBtn" aria-label="Menu" aria-haspopup="true"></button>
+   <div class="pop" id="themePop" hidden>
+    <button class="mi" id="tipsBtn"></button>
+    <div class="mi"><span id="themeBtn"></span> Theme</div>
+    <div class="modesw" style="margin:0 0 8px"><div role="group" aria-label="Light or dark"><button data-tn="light" aria-pressed="false">Light</button><button data-tn="dark" aria-pressed="false">Dark</button></div></div>
+    <div class="sw" role="group" aria-label="Colour"><button data-t="default" title="Default" aria-label="Colour: Default" aria-pressed="false"></button><button data-t="pink" title="Pink" aria-label="Colour: Pink" aria-pressed="false"></button><button data-t="blue" title="Blue" aria-label="Colour: Blue" aria-pressed="false"></button></div>
+    <button class="mi" id="soundBtn" aria-pressed="true" aria-label="Sound"></button>
+    <p class="hint" id="dbState" style="margin:6px 6px 2px;font-size:.78rem"></p>
+   </div>
+  </div>
+ </header>
+ <div class="ftabs" id="tpTabs" data-p="timer" role="group" aria-label="Timer tools" style="margin-top:0"><button data-tp="timer" aria-pressed="true">Timer</button><button data-tp="alarm" aria-pressed="false">Alarm</button><button data-tp="sw" aria-pressed="false">Stopwatch</button><button data-tp="clock" aria-pressed="false">Clock</button></div>
+ <section class="card" id="moodCard" data-p="timer" data-tpx aria-label="Mood"><h2>How do you feel today?</h2><div class="pal" id="moodRow"></div><p class="hint" id="moodTip"></p></section>
+ <section class="card" data-p="timer" data-tpx aria-label="Timer">
+  <div class="modesw" id="modeSw"><div role="group" aria-label="Mode"><button data-s="0" aria-pressed="true">Easy</button><button data-s="1" aria-pressed="false">Strict</button></div><span class="hint" id="modeHint"></span></div>
+  <div class="tabs" role="group" aria-label="Session type">
+   <button data-m="focus" aria-pressed="true">Focus</button>
+   <button data-m="short" aria-pressed="false">Short break</button>
+   <button data-m="long" aria-pressed="false">Long break</button>
+  </div>
+  <div class="dial">
+   <svg viewBox="0 0 100 100" aria-hidden="true"><circle class="track" cx="50" cy="50" r="45"/><circle class="prog" id="prog" cx="50" cy="50" r="45"/></svg>
+   <div class="time"><b id="clock" role="button" tabindex="0" aria-label="Timer. Tap to change its length" title="Tap to change the timer length">25:00</b><span id="label">Pick a task or just start</span></div>
+  </div>
+  <div class="ctrl">
+   <button class="ghost" id="resetBtn" aria-label="Reset timer">Reset</button>
+   <button class="main-btn" id="startBtn">Start</button>
+   <button class="ghost" id="skipBtn" aria-label="Skip to next session">Skip</button>
+  </div>
+  <div class="stats"><div class="dots" id="dots" aria-hidden="true"></div><span id="count">0 focus sessions today</span></div>
+  <p class="hint" style="text-align:center;margin:8px 0 0">Tap the time to change it · Space starts or pauses</p>
+ </section>
+ <section class="card" id="lockTools" data-p="timer" data-tpx aria-label="Strict tools">
+  <h2><span id="lkTitle">Notes</span> <span class="hint" id="lkInfo" hidden>· you left the page <b id="lkLeaves">0</b> time(s)</span></h2>
+  <textarea id="lkNote" rows="2" placeholder="Jot it down here, no need to open another app" aria-label="Quick note"></textarea>
+  <div class="crow"><button class="main-btn sm" id="lkSave">Save note</button><button class="ghost sm" id="lkItems">Open a study item</button></div>
+  <p class="hint" id="lkHint" hidden>Need a word meaning? Use the dictionary button at the top. Pause, reset and skip are locked until the timer ends.</p>
+  <button class="ghost sm" id="giveUp" hidden>Give up</button>
+ </section>
+ <section class="card" id="breakCard" data-p="timer" data-tpx aria-label="Break time" hidden><h2>Break time</h2><ul class="brk" id="breakList"></ul></section>
+ <section class="card" id="statsCard" data-p="timer" data-tpx aria-label="Stats">
+  <div class="kpis"><div><b id="kStreak">0</b><span>🔥 day streak</span></div><div><b id="kBest">0</b><span>best streak</span></div><div><b id="kSess">0</b><span>⭐ sessions</span></div><div><b id="kMin">0</b><span>minutes focused</span></div></div>
+  <div class="th"><h2 id="stRange" style="margin:0"></h2><div class="crow" style="margin:0"><div class="ftabs" id="stM" style="margin:0"><button data-m="n" aria-pressed="true">Sessions</button><button data-m="m" aria-pressed="false">Minutes</button></div><button class="ghost sm" id="stPrev" aria-label="Previous week">‹</button><button class="ghost sm" id="stNext" aria-label="Next week">›</button></div></div>
+  <div class="bars" id="bars"></div>
+  <p class="hint" id="stNote"></p>
+ </section>
+
+ <div class="side">
+  <section class="card" data-p="timer" data-tpx aria-label="Tasks">
+  <h2>Today's tasks</h2>
+  <ul id="tasks"></ul>
+  <details class="starter" open><summary><b>Starter tasks for beginners</b></summary><p class="hint">Based on Japanese study habits like kaizen (tiny steps), hansei (reflection) and a tidy desk. Tap + to add a task to today.</p><div id="starter"></div><button class="ghost sm" id="starterAll">Add all to today</button></details>
+  <p class="hint">Tap a task's name to edit it. Add your own tasks from the Calendar: open a day and press +.</p>
+ </section>
+ </div>
+
+ <section class="card cal" id="calSec" data-p="cal" aria-label="Calendar">
+  <div class="ftabs" id="calTabs" role="group" aria-label="Calendar view" style="margin-top:0"><button data-v="today">Today</button><button data-v="sched">Schedule</button><button data-v="week">Week</button><button data-v="month">Month</button><button data-v="year">Year</button></div>
+  <div class="calwrap"><div class="calhead"><h2 class="ch"><button class="ghost sm" id="backM" hidden>← Month</button><button class="ymbtn" id="ymBtn" aria-haspopup="true"><span id="calTitle">Calendar</span><span class="yb" id="calYr"></span></button><span id="calDow"></span></h2></div><div class="pop ymp" id="ymPop" hidden></div></div>
+  <div id="calMain"><div class="grid" id="calGrid"></div></div>
+  <div id="weekV" hidden></div><div id="yearV" hidden></div><div id="schedV" hidden></div><div id="detail" hidden></div>
+ </section>
+  <section class="card" data-p="chat" aria-label="Chat">
+  <div class="ftabs" id="chTabs" role="group" aria-label="Chat or files" style="margin-top:0"><button data-ch="chat" aria-pressed="true">Chat</button><button data-ch="files" aria-pressed="false">Files</button></div>
+  <div id="chatMain">
+   <div id="thread" class="thread"></div>
+   <div class="comp2">
+    <button class="icon" id="plusBtn" aria-label="Attach files"></button>
+    <textarea id="msgIn" rows="1" placeholder="Message yourself" aria-label="Message"></textarea>
+    <button class="icon" id="cuteBtn" aria-label="Set arrival time and day"></button>
+    <button class="icon go" id="micBtn"></button>
+   </div>
+   <div id="pendBar" class="pb"></div>
+   <div id="schPop" class="spop" hidden>
+    <div class="crow" style="margin:0"><label class="tl">Day <input type="date" id="schD"></label><label class="tl">Time <input type="time" id="schT"></label></div>
+    <p class="hint">The message stays hidden until this time. Then it arrives here as a reminder and rings.</p>
+    <div id="schList"></div>
+   </div>
+   <input type="file" id="fileIn" multiple hidden>
+  </div>
+  <div id="chatFiles" hidden>
+  <h2>Storage</h2>
+  <div class="crow" style="margin:0 0 10px">
+   <label class="ghost sm" style="cursor:pointer">Add files<input type="file" id="fFiles" multiple hidden></label>
+   <input type="text" id="fLink" placeholder="Paste a link" aria-label="Link" style="flex:1;min-width:140px">
+   <button class="main-btn sm" id="fSave">Save</button>
+  </div>
+  <div class="ftabs" id="ftabs" role="group" aria-label="Filter">
+   <button data-f="all" aria-pressed="true">All</button><button data-f="doc" aria-pressed="false">Docs</button><button data-f="image" aria-pressed="false">Images</button><button data-f="video" aria-pressed="false">Videos</button><button data-f="link" aria-pressed="false">Links</button>
+  </div>
+  <div id="flist"></div>
+  <p class="hint" id="stor"></p>
+  <div class="crow"><button class="ghost sm" id="cleanBtn">Clean up offline data</button></div>
+ </div>
+ </section>
+ 
+ <section class="card" id="clockCard" data-p="timer" aria-label="Clock">
+  
+  <div id="cTime" class="bigclock"><b id="bigT"></b><span class="hint" id="bigD"></span></div>
+  <div id="cAlarm" hidden>
+   <div class="crow" style="margin:0 0 10px"><button class="main-btn" id="alNew">+ Add alarm</button></div>
+   <ul id="alList"></ul>
+   <p class="hint">Alarms and reminders ring full screen and do not need notifications. The page must stay open, and the screen is kept awake while something is due in the next 3 hours. Tap anywhere on the page once after opening it so sound is allowed. For overnight alarms, also set one in your phone's own Clock app.</p>
+  </div>
+  <div id="cSw" class="bigclock" hidden><b id="swT">00:00.0</b><div class="crow" style="justify-content:center"><button class="main-btn sm" id="swGo">Start</button><button class="ghost sm" id="swLap">Lap</button><button class="ghost sm" id="swRst">Reset</button></div><ol id="swLaps" class="hint"></ol></div>
+ </section>
+ <section class="card guide" data-p="tips" aria-label="Help">
+  <h2>Help</h2>
+  <div class="dsec"><h3>How to use Synergy</h3>
+  <ol>
+   <li><b>Start of the day:</b> Synergy asks how you feel and can add starter tasks for beginners. You can edit them before adding.</li>
+   <li><b>Timer:</b> tap the time to change its length. Mood, stats and today's tasks are around the timer. Tabs switch to Alarm, Stopwatch and Clock.</li>
+   <li><b>When a session ends:</b> a full-screen reminder asks if you want to take a break or keep studying. Breaks suggest stretching, no phone, recalling what you learned and an eye rest.</li>
+   <li><b>Calendar:</b> Today, Schedule, Week, Month or Year. Open a day to add tasks with +, stickers and your mood.</li>
+   <li><b>Chat:</b> message yourself. Use + to attach, the clock button to set when it arrives, and the Files tab for everything you saved.</li>
+   <li><b>Dictionary:</b> the book button at the top looks up a word and keeps a list of your saved words. It also works while the timer runs.</li>
+   <li><b>Strict mode:</b> after you type a promise you cannot pause, reset or skip. Notes, the dictionary and saved study items still work.</li>
+   <li><b>Videos:</b> YouTube links you saved open in a focus player. You are warned if another video opens or you leave the page.</li>
+   <li><b>Alarms and reminders:</b> they ring full screen while the page is open. Set a phone alarm too for important ones.</li>
+  </ol></div>
+ </section>
+</main>
+<div id="ring" class="ring" hidden role="alertdialog" aria-labelledby="ringT"><div class="rbox"><div class="big">⏰</div><h2 id="ringT"></h2><p id="ringB"></p><p class="ringtip" id="ringTip"></p><div class="crow" id="ringBtns" style="justify-content:center"></div></div></div>
+<div id="modal" class="modal" hidden></div>
+<div id="toast" class="toast" role="status" hidden></div>
+<script src="js/config.js"></script>
+<script src="js/database.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

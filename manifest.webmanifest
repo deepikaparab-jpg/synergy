@@ -1,0 +1,13 @@
+{
+  "name": "Synergy – Focus & Study Planner",
+  "short_name": "Synergy",
+  "description": "Pomodoro timer, tasks, calendar, alarms, notes, dictionary and study files in one page.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F3EADB",
+  "theme_color": "#F3EADB",
+  "icons": [
+    { "src": "icons/logo.png", "sizes": "192x192", "type": "image/png", "purpose": "any" }
+  ]
+}
